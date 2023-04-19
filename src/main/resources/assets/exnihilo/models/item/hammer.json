@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "exnihilo:items/tools/hammer/hammer_handle",
+    "layer1": "exnihilo:items/tools/hammer/hammer_head"
+  }
+}

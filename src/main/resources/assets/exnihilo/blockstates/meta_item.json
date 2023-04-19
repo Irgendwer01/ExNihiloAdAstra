@@ -1,0 +1,56 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "builtin/generated",
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "type": {
+      "porcelain_clay": {
+        "textures": {
+          "layer0": "exnihilo:items/porcelainclay"
+        }
+      },
+      "silkworm": {
+        "textures": {
+          "layer0": "exnihilo:items/silkworm"
+        }
+      },
+      "ancient_spores": {
+        "textures": {
+          "layer0": "exnihilo:items/ancientspores"
+        }
+      },
+      "grass_seeds": {
+        "textures": {
+          "layer0": "exnihilo:items/grassseeds"
+        }
+      },
+      "porcelain_doll": {
+        "textures": {
+          "layer0": "exnihilo:items/doll"
+        }
+      },
+      "stone_pebble": {
+        "textures": {
+          "layer0": "exnihilo:items/stone_pebble"
+        }
+      },
+      "andesite_pebble": {
+        "textures": {
+          "layer0": "exnihilo:items/andesite_pebble"
+        }
+      },
+      "granite_pebble": {
+        "textures": {
+          "layer0": "exnihilo:items/granite_pebble"
+        }
+      },
+      "diorite_pebble": {
+        "textures": {
+          "layer0": "exnihilo:items/diorite_pebble"
+        }
+      }
+    }
+  }
+}
