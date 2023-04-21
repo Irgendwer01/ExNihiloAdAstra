@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
+import static exnihilo.ExNihilo.logger;
+
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
@@ -23,13 +25,17 @@ public class ClientProxy extends CommonProxy {
     //                                 //
     /////////////////////////////////////
 
-    public static final IItemColor HAMMER_COLOR = (stack, tintIndex) -> tintIndex == 1 ? ((HammerBase) stack.getItem()).getColor() : 0xFFFFFF;
-
+    public static final IItemColor HAMMER_COLOR = (stack, tintIndex) -> {
+        if (stack.getItem() instanceof HammerBase && tintIndex == 1) {
+            return ((HammerBase) stack.getItem()).getColor();
+        }
+        return 0xFFFFFF;
+    };
     @SubscribeEvent
     public static void registerColors(ColorHandlerEvent.Item e) {
         for (Item item : data.ITEMS) {
             if (item instanceof HammerBase) {
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(HAMMER_COLOR, item);
+                e.getItemColors().registerItemColorHandler(HAMMER_COLOR, item);
             }
         }
     }
@@ -45,6 +51,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void onLoad() {
+        logger.log(org.apache.logging.log4j.Level.INFO, "test");
         super.onLoad();
     }
 

@@ -1,14 +1,14 @@
 package exnihilo;
 
-import exnihilo.client.ClientProxy;
 import exnihilo.common.CommonProxy;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 @Mod(modid = "exnihilo", name = "Ex Nihilo Ad Astra", version = "1.0", dependencies =
         "after:crafttweaker;" +
@@ -18,6 +18,8 @@ public class ExNihilo {
 
     @SidedProxy(clientSide = "exnihilo.client.ClientProxy", serverSide = "exnihilo.common.CommonProxy")
     public static CommonProxy proxy;
+
+    public static Logger logger = LogManager.getLogger("exnihilo");
 
     @Mod.EventHandler
     public void onLoad(FMLConstructionEvent e) {

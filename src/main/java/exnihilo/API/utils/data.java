@@ -1,6 +1,7 @@
 package exnihilo.API.utils;
 
 import com.google.common.collect.Lists;
+import exnihilo.common.items.tools.HammerBase;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 

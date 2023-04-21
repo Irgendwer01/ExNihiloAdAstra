@@ -2,6 +2,7 @@ package exnihilo.common.items;
 
 import exnihilo.API.render.IModelRender;
 import exnihilo.API.utils.data;
+import exnihilo.common.entities.PebbleEntity;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -9,10 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -27,7 +25,7 @@ import static exnihilo.common.CommonProxy.creativeTab;
 
 public class MetaItems extends Item implements IModelRender {
 
-    private ArrayList<String> meta_items = new ArrayList<>();
+    private final ArrayList<String> meta_items = new ArrayList<>();
     public MetaItems() {
         super();
         setTranslationKey("meta_item");
@@ -62,22 +60,47 @@ public class MetaItems extends Item implements IModelRender {
     }
 
     @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        switch (stack.getMetadata()) {
+            case (5):
+            case (6):
+            case (7):
+            case (8): {
+                ItemStack pebble = stack.copy();
+                pebble.setCount(1);
+                PebbleEntity projectile = new PebbleEntity(worldIn, player);
+                projectile.setStack(pebble);
+                projectile.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 0.5F);
+                worldIn.spawnEntity(projectile);
+                stack.shrink(1);
+                return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+            }
+        }
+        return ActionResult.newResult(EnumActionResult.PASS, stack);
+    }
+
+    @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         Block block = worldIn.getBlockState(pos).getBlock();
         ItemStack stack = player.getHeldItem(hand);
         switch (stack.getMetadata()) {
-            case (2):
+            case (2): {
                 if (block == Blocks.DIRT) {
                     worldIn.setBlockState(pos, Blocks.GRASS.getDefaultState());
                     stack.shrink(1);
                     return EnumActionResult.SUCCESS;
                 }
-            case (3):
-                if (block == Blocks.MYCELIUM) {
+                break;
+            }
+            case (3): {
+                if (block == Blocks.DIRT) {
                     worldIn.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
                     stack.shrink(1);
                     return EnumActionResult.SUCCESS;
                 }
+                break;
+            }
         }
         return EnumActionResult.PASS;
     }

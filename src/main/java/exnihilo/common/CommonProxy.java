@@ -5,6 +5,7 @@ import exnihilo.Values;
 import exnihilo.common.items.MetaItems;
 import exnihilo.common.items.tools.HammerBase;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,18 +24,17 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> e) {
-        new HammerBase("wooden_hammer", Item.ToolMaterial.WOOD, 0x643200);
-        new HammerBase("stone_hammer", Item.ToolMaterial.STONE, 0xcdcdcd);
-        new HammerBase("golden_hammer", Item.ToolMaterial.GOLD, 0xffe650);
-        new HammerBase("iron_hammer", Item.ToolMaterial.IRON, 0xc8c8c8);
-        new HammerBase("diamond_hammer", Item.ToolMaterial.DIAMOND, 0xc8ffff);
+        data.ITEMS.add(new HammerBase("wooden_hammer", Item.ToolMaterial.WOOD, 0x896727));
+        data.ITEMS.add(new HammerBase("stone_hammer", Item.ToolMaterial.STONE, 0x9a9a9a));
+        data.ITEMS.add(new HammerBase("golden_hammer", Item.ToolMaterial.GOLD, 0xeaee57));
+        data.ITEMS.add(new HammerBase("iron_hammer", Item.ToolMaterial.IRON, 0xFFFFFF));
+        data.ITEMS.add(new HammerBase("diamond_hammer", Item.ToolMaterial.DIAMOND, 0x33ebcb));
         for (Item item : data.ITEMS) {
             e.getRegistry().register(item);
         }
     }
 
     public void onLoad() {
-
     }
     public void preInit() {
 
