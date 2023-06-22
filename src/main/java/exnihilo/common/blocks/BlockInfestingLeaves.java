@@ -35,6 +35,7 @@ public class BlockInfestingLeaves extends BlockLeaves implements ITileEntityProv
         this.setTranslationKey("infesting_leaves");
         this.setCreativeTab(CommonProxy.creativeTab);
         this.setTickRandomly(true);
+        this.leavesFancy = true;
         data.BLOCKS.add(this);
     }
 
