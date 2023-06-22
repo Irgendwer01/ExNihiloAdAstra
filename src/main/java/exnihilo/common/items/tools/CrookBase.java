@@ -13,7 +13,7 @@ import java.util.Collections;
 public class CrookBase extends ItemTool implements IModelRender {
 
 
-    public CrookBase (String name, ToolMaterial materialIn) {
+    public CrookBase(String name, ToolMaterial materialIn) {
         super(materialIn, Collections.emptySet());
         this.setCreativeTab(CommonProxy.creativeTab);
         this.setTranslationKey(name);

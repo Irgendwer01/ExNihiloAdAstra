@@ -2,13 +2,25 @@ package exnihilo.client;
 
 import exnihilo.API.render.IModelRender;
 import exnihilo.API.utils.data;
+import exnihilo.ExNihilo;
+import exnihilo.client.model.InfestedLeavesBakedModel;
+import exnihilo.client.render.RenderInfestingLeaves;
+import exnihilo.client.render.renderProjectilePebble;
 import exnihilo.common.CommonProxy;
+import exnihilo.common.blocks.tiles.TileInfestingLeaves;
+import exnihilo.common.entities.ProjectilePebble;
 import exnihilo.common.items.tools.HammerBase;
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -47,6 +59,19 @@ public class ClientProxy extends CommonProxy {
                 ((IModelRender) item).initModel(e);
             }
         }
+        for (Block block : data.BLOCKS) {
+            if (block instanceof IModelRender) {
+                ((IModelRender) block).initModel(e);
+            }
+        }
+        RenderingRegistry.registerEntityRenderingHandler(ProjectilePebble.class, new renderProjectilePebble.Factory());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileInfestingLeaves.class, new RenderInfestingLeaves());
+        ModelLoader.setCustomStateMapper(infestedLeaves, new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                return InfestedLeavesBakedModel.variantTag;
+            }
+        });
     }
 
     @Override

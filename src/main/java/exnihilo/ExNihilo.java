@@ -1,9 +1,15 @@
 package exnihilo;
 
 import exnihilo.common.CommonProxy;
+import exnihilo.compat.TOPHandler;
+import mcjty.theoneprobe.TheOneProbe;
+import mcjty.theoneprobe.api.ITheOneProbe;
+import mcjty.theoneprobe.apiimpl.TheOneProbeImp;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
@@ -39,5 +45,9 @@ public class ExNihilo {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent e) {
         proxy.postInit();
+        if (Loader.isModLoaded("theoneprobe")) {
+            ITheOneProbe top = TheOneProbe.theOneProbeImp;
+            top.registerProvider(new TOPHandler());
+        }
     }
 }

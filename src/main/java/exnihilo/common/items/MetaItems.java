@@ -2,12 +2,14 @@ package exnihilo.common.items;
 
 import exnihilo.API.render.IModelRender;
 import exnihilo.API.utils.data;
-import exnihilo.common.entities.PebbleEntity;
+import exnihilo.common.CommonProxy;
+import exnihilo.common.entities.ProjectilePebble;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
@@ -22,6 +24,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 import static exnihilo.common.CommonProxy.creativeTab;
+import static exnihilo.common.blocks.BlockInfestingLeaves.infest;
 
 public class MetaItems extends Item implements IModelRender {
 
@@ -33,20 +36,19 @@ public class MetaItems extends Item implements IModelRender {
         setCreativeTab(creativeTab);
         setHasSubtypes(true);
         meta_items.add(0, "silkworm");
-        meta_items.add(1, "porcelain_clay");
-        meta_items.add(2, "grass_seeds");
-        meta_items.add(3, "ancient_spores");
-        meta_items.add(4, "porcelain_doll");
-        meta_items.add(5, "stone_pebble");
-        meta_items.add(6, "andesite_pebble");
-        meta_items.add(7, "diorite_pebble");
-        meta_items.add(8, "granite_pebble");
+        meta_items.add(1, "grass_seeds");
+        meta_items.add(2, "ancient_spores");
+        meta_items.add(3, "porcelain_doll");
+        meta_items.add(4, "stone_pebble");
+        meta_items.add(5, "andesite_pebble");
+        meta_items.add(6, "diorite_pebble");
+        meta_items.add(7, "granite_pebble");
         data.ITEMS.add(this);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getTranslationKey(ItemStack stack) {
+    public @Nonnull String getTranslationKey(ItemStack stack) {
         return getTranslationKey() + "." + meta_items.get(stack.getItemDamage());
     }
 
@@ -60,20 +62,23 @@ public class MetaItems extends Item implements IModelRender {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
+    public @Nonnull ActionResult<ItemStack> onItemRightClick( @Nonnull World worldIn, EntityPlayer player, @Nonnull EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         switch (stack.getMetadata()) {
             case (5):
             case (6):
             case (7):
             case (8): {
-                ItemStack pebble = stack.copy();
-                pebble.setCount(1);
-                PebbleEntity projectile = new PebbleEntity(worldIn, player);
-                projectile.setStack(pebble);
+                ProjectilePebble projectile = new ProjectilePebble(worldIn, player);
                 projectile.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 0.5F);
+                if (worldIn.isRemote) {
+                    break;
+                }
                 worldIn.spawnEntity(projectile);
-                stack.shrink(1);
+                if (!player.isCreative()) {
+                    stack.shrink(1);
+                }
+                player.playSound(SoundEvents.ENTITY_SNOWBALL_THROW, 0.6F, 1);
                 return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
             }
         }
@@ -81,22 +86,31 @@ public class MetaItems extends Item implements IModelRender {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public @Nonnull EnumActionResult onItemUse(EntityPlayer player, World worldIn, @Nonnull BlockPos pos, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
         Block block = worldIn.getBlockState(pos).getBlock();
         ItemStack stack = player.getHeldItem(hand);
         switch (stack.getMetadata()) {
+            case (0): {
+                if ((worldIn.getBlockState(pos) != CommonProxy.infestingLeaves.getDefaultState() || worldIn.getBlockState(pos) != CommonProxy.infestedLeaves.getDefaultState()) && worldIn.getBlockState(pos).getBlock().isLeaves(worldIn.getBlockState(pos), worldIn, pos)) {
+                    infest(pos, worldIn);
+                }
+            }
             case (2): {
-                if (block == Blocks.DIRT) {
+                if (block == Blocks.DIRT || block == Blocks.MYCELIUM) {
                     worldIn.setBlockState(pos, Blocks.GRASS.getDefaultState());
-                    stack.shrink(1);
+                    if (!player.isCreative()) {
+                        stack.shrink(1);
+                    }
                     return EnumActionResult.SUCCESS;
                 }
                 break;
             }
             case (3): {
-                if (block == Blocks.DIRT) {
+                if (block == Blocks.DIRT || block == Blocks.GRASS) {
                     worldIn.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
-                    stack.shrink(1);
+                    if (!player.isCreative()) {
+                        stack.shrink(1);
+                    }
                     return EnumActionResult.SUCCESS;
                 }
                 break;
